@@ -1,311 +1,216 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1" name="viewport"/>
-  <meta content="noindex, nofollow" name="robots"/>
-  <meta content="课程练习：个人介绍、技能与作品门户。" name="description"/>
-  <title>
-   🕷️我的个人主页
-  </title>
-  <link href="assets/favicon.svg" rel="icon" type="image/svg+xml"/>
-  <!-- CSS 负责颜色、字体、布局；defer 让 JavaScript 在 HTML 解析完成后执行。 -->
-  <link href="styles.css" rel="stylesheet"/>
-   <script src="works-data.js" defer></script>
-  <script src="works-render.js" defer></script>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>吴霞焕｜人工智能技术应用 · 25 大模型应用开发班</title>
+  <meta name="description" content="吴霞焕的个人主页：人工智能技术应用专业在读，省级计算机创新设计大赛团队赛三等奖，正在把网页从能看懂变成能写出来。">
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <!-- 只留 app.js 一个脚本。
+       原来那两个（works-data.js / works-render.js）连同作品区一起删掉了。 -->
   <script src="app.js" defer></script>
- </head>
- <body>
-  <a class="skip-link" href="#main">
-   跳到正文
-  </a>
-  <!-- 第 4 课新增①：顶部阅读进度条，宽度由 JavaScript 控制 -->
-  <div class="reading-progress" id="reading-progress">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+
+  <!-- 第 4 课 TODO 03：顶部阅读进度条，宽度由 JS 控制 -->
+  <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
+
+  <!-- 蜘蛛图形定义一次，全页用 <use> 复用 -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="spider" viewBox="0 0 24 24">
+      <path d="M12 2C7.5 2 4 5.5 4 10c0 2 1 3.8 2.5 5L5 18l2-1 1.5-1.2c1 .5 2.1.8 3.2.8s2.2-.3 3.2-.8L15 17l2 1-1.5-3c1.5-1.2 2.5-3 2.5-5C20 5.5 16.5 2 12 2zm0 2c3.3 0 6 2.7 6 6 0 1.3-.6 2.4-1.4 3.2-.3-.1-.6-.2-.9-.3.3-.4.5-.9.5-1.4 0-1.1-.9-2-2-2s-2 .9-2 2c0 .5.2 1 .5 1.4-.3.1-.6.2-.9.3-.8-.8-1.4-1.9-1.4-3.2 0-3.3 2.7-6 6-6z"/>
+    </symbol>
+  </svg>
+
+  <!-- 装饰层（对读屏隐藏）：背景蛛网、蛛丝、沿丝爬行的蜘蛛 -->
+  <div class="web-bg" aria-hidden="true"><svg id="webBg" preserveAspectRatio="none"></svg></div>
+
+  <div class="silk" aria-hidden="true">
+    <div class="silk-track"></div>
+    <div class="silk-fill" id="silkFill"></div>
+    <div class="silk-spider" id="silkSpider"><svg><use href="#spider"/></svg></div>
   </div>
-  <header class="site-header">
-   <div class="container header-inner">
-    <a class="brand" href="#about">
-     <svg class="spider-icon spider-icon--small" viewBox="0 0 24 24"><path d="M12 2C7.5 2 4 5.5 4 10c0 2 1 3.8 2.5 5L5 18l2-1 1.5-1.2c1 .5 2.1.8 3.2.8s2.2-.3 3.2-.8L15 17l2 1-1.5-3c1.5-1.2 2.5-3 2.5-5C20 5.5 16.5 2 12 2zm0 2c3.3 0 6 2.7 6 6 0 1.3-.6 2.4-1.4 3.2-.3-.1-.6-.2-.9-.3.3-.4.5-.9.5-1.4 0-1.1-.9-2-2-2s-2 .9-2 2c0 .5.2 1 .5 1.4-.3.1-.6.2-.9.3-.8-.8-1.4-1.9-1.4-3.2 0-3.3 2.7-6 6-6z"/></svg>
-     我的主页
-    </a>
-    <!-- href="#栏目ID" 是原生锚点：即使不加载 JavaScript，也能跳到对应栏目。 -->
-    <nav aria-label="主导航">
-     <a href="#about">
-      关于
-     </a>
-     <a href="#experience">
-      经历
-     </a>
-     <a href="#projects">
-      科研
-     </a>
-     <a href="#skills">
-      技能
-     </a>
-     <a href="#portfolio">
-      作品
-     </a>
-    </nav>
-   </div>
+
+  <header class="hd">
+    <div class="hd-in">
+      <!-- 左上角只放蜘蛛图标：姓名已经是大标题了，这里重复没必要 -->
+      <a class="brand" href="#about" aria-label="回到页面顶部">
+        <svg aria-hidden="true"><use href="#spider"/></svg>
+      </a>
+      <nav aria-label="主导航">
+        <a href="#about">关于</a>
+        <a href="#study">学习</a>
+        <a href="#story">经历</a>
+        <a href="#tags">标签</a>
+      </nav>
+    </div>
   </header>
-  <div class="top-banner">
-  <img src="2.jpg" alt="顶部横幅" class="banner-img">
-</div>
 
   <main id="main">
-   <!-- HTML 练习：修改姓名、研究方向、照片路径和联系方式。 -->
-   <section class="hero" id="about">
-    <div class="container">
-     <div class="hero-top">
-      <div class="hero-copy">
-       <h1>
-        <svg class="spider-icon" viewBox="0 0 24 24"><path d="M12 2C7.5 2 4 5.5 4 10c0 2 1 3.8 2.5 5L5 18l2-1 1.5-1.2c1 .5 2.1.8 3.2.8s2.2-.3 3.2-.8L15 17l2 1-1.5-3c1.5-1.2 2.5-3 2.5-5C20 5.5 16.5 2 12 2zm0 2c3.3 0 6 2.7 6 6 0 1.3-.6 2.4-1.4 3.2-.3-.1-.6-.2-.9-.3.3-.4.5-.9.5-1.4 0-1.1-.9-2-2-2s-2 .9-2 2c0 .5.2 1 .5 1.4-.3.1-.6.2-.9.3-.8-.8-1.4-1.9-1.4-3.2 0-3.3 2.7-6 6-6z"/></svg>
-        吴霞焕
-        <span>
-         🌈Wxh☁️
-        </span>
-       </h1>
-       <p class="hero-role">
-        人工智能技术应用专业学生 · 前端开发学习者
-       </p>
-       <p class="hero-school">
-        我的学校 · 广东科学技术职业学院<br>
-        我的班级 · 25大模型应用开发班
-       </p>
-      </div>
-      <div class="hero-visual">
-       <figure>
-        <img alt="个人头像" height="220" src="1.jpg" width="220"/>
-       </figure>
-      </div>
-     </div>
-     <div class="research-direction" id="research-direction">
-      <span class="eyebrow">
-       <svg class="spider-icon spider-icon--small" viewBox="0 0 24 24"><path d="M12 2C7.5 2 4 5.5 4 10c0 2 1 3.8 2.5 5L5 18l2-1 1.5-1.2c1 .5 2.1.8 3.2.8s2.2-.3 3.2-.8L15 17l2 1-1.5-3c1.5-1.2 2.5-3 2.5-5C20 5.5 16.5 2 12 2zm0 2c3.3 0 6 2.7 6 6 0 1.3-.6 2.4-1.4 3.2-.3-.1-.6-.2-.9-.3.3-.4.5-.9.5-1.4 0-1.1-.9-2-2-2s-2 .9-2 2c0 .5.2 1 .5 1.4-.3.1-.6.2-.9.3-.8-.8-1.4-1.9-1.4-3.2 0-3.3 2.7-6 6-6z"/></svg>
-       学习方向
-      </span>
-      <p>
-       HTML5、CSS3、JavaScript，正在学习 Git、数据库与网站部署。
-      </p>
-     </div>
-     <div class="profile-details">
-      <div>
-       <span>
-        学习阶段
-       </span>
-       <p>
-        在校学习
-       </p>
-      </div>
-      <div>
-       <span>
-        所在城市
-       </span>
-       <p>
-        珠海
-       </p>
-      </div>
-      <div>
-       <span>
-        联系
-       </span>
-       <p>
-        131xxxx6959
-       </p>
-      </div>
-      <div>
-       <span>
-        学校地址
-       </span>
-       <p>
-        广东珠海金湾区
-       </p>
-      </div>
-     </div>
-    </div>
-   </section>
-   <!-- 每个栏目复用 section → container → 标题/内容 的结构，统一由 CSS 控制样式。 -->
-   <section class="section" id="experience">
-    <div class="container">
-     <header class="section-heading">
-      <h2>
-       <svg class="spider-icon spider-icon--small" viewBox="0 0 24 24"><path d="M12 2C7.5 2 4 5.5 4 10c0 2 1 3.8 2.5 5L5 18l2-1 1.5-1.2c1 .5 2.1.8 3.2.8s2.2-.3 3.2-.8L15 17l2 1-1.5-3c1.5-1.2 2.5-3 2.5-5C20 5.5 16.5 2 12 2zm0 2c3.3 0 6 2.7 6 6 0 1.3-.6 2.4-1.4 3.2-.3-.1-.6-.2-.9-.3.3-.4.5-.9.5-1.4 0-1.1-.9-2-2-2s-2 .9-2 2c0 .5.2 1 .5 1.4-.3.1-.6.2-.9.3-.8-.8-1.4-1.9-1.4-3.2 0-3.3 2.7-6 6-6z"/></svg>
-       教育经历
-      </h2>
-     </header>
-     <div class="section-content">
-      <!-- TASK-HTML：复制 experience-item 可增加一条自己的经历。 -->
-      <div class="experience-item">
-       <p class="experience-heading">
-        <strong>
-         我的学校 · 人工智能技术应用专业<br>在读
-        </strong>
-       </p>
-       <p class="experience-detail">
-        在课堂系统学习前端网页开发，像手工创作一样耐心打磨细节，用一个个项目记录自己的学习与成长。
-       </p>
-      </div>
-     </div>
-    </div>
-   </section>
-   <section class="section" id="projects">
-    <div class="container">
-     <header class="section-heading">
-      <h2>
-       <svg class="spider-icon spider-icon--small" viewBox="0 0 24 24"><path d="M12 2C7.5 2 4 5.5 4 10c0 2 1 3.8 2.5 5L5 18l2-1 1.5-1.2c1 .5 2.1.8 3.2.8s2.2-.3 3.2-.8L15 17l2 1-1.5-3c1.5-1.2 2.5-3 2.5-5C20 5.5 16.5 2 12 2zm0 2c3.3 0 6 2.7 6 6 0 1.3-.6 2.4-1.4 3.2-.3-.1-.6-.2-.9-.3.3-.4.5-.9.5-1.4 0-1.1-.9-2-2-2s-2 .9-2 2c0 .5.2 1 .5 1.4-.3.1-.6.2-.9.3-.8-.8-1.4-1.9-1.4-3.2 0-3.3 2.7-6 6-6z"/></svg>
-       项目经历
-      </h2>
-     </header>
-     <div class="section-content">
-      <article class="research-item">
-       <h3>
-        <time>
-         课程练习
-        </time>
-        个人作品集主页
-       </h3>
-       <p>
-        项目简介：这是我的个人作品集网页，既是课程练习，也是记录自我的数字小空间。<br>项目内容：使用 HTML 搭建页面结构，CSS 调配配色与排版，搭配简单 JavaScript 实现页面小动画；页面选用柔和的紫色风格，融入小蜘蛛图标这类趣味细节。开发全程用 Git 保存版本，反复调整页面布局，完成测试与部署上线。
-项目收获：在写代码的同时练习审美表达，学会把自己的想法、喜好放进网页里。在调试页面的过程锻炼耐心，体会从零搭建作品的乐趣，像做手工一样一点点打磨页面。
-       </p>
-      </article>
-     </div>
-    </div>
-   </section>
-   <section class="section" id="skills">
-    <div class="container">
-     <header class="section-heading">
-      <h2>
-       <svg class="spider-icon spider-icon--small" viewBox="0 0 24 24"><path d="M12 2C7.5 2 4 5.5 4 10c0 2 1 3.8 2.5 5L5 18l2-1 1.5-1.2c1 .5 2.1.8 3.2.8s2.2-.3 3.2-.8L15 17l2 1-1.5-3c1.5-1.2 2.5-3 2.5-5C20 5.5 16.5 2 12 2zm0 2c3.3 0 6 2.7 6 6 0 1.3-.6 2.4-1.4 3.2-.3-.1-.6-.2-.9-.3.3-.4.5-.9.5-1.4 0-1.1-.9-2-2-2s-2 .9-2 2c0 .5.2 1 .5 1.4-.3.1-.6.2-.9.3-.8-.8-1.4-1.9-1.4-3.2 0-3.3 2.7-6 6-6z"/></svg>
-       技能与实践
-      </h2>
-     </header>
-     <div class="section-content">
-      <ul class="skills-list">
-       <li>
-        <strong>
-         网页内容
-        </strong>
-        HTML5 结构、图片、链接。
-       </li>
-       <li>
-        <strong>
-         页面样式
-        </strong>
-        CSS3 字体、颜色、响应式布局。
-       </li>
-       <li>
-        <strong>
-         开发过程
-        </strong>
-        JavaScript、Git、检查与部署。
-       </li>
-      </ul>
-     </div>
-    </div>
-   </section>
-   <section class="section" id="portfolio">
-    <div class="container">
-     <header class="section-heading">
-      <h2>
-       <svg class="spider-icon spider-icon--small" viewBox="0 0 24 24"><path d="M12 2C7.5 2 4 5.5 4 10c0 2 1 3.8 2.5 5L5 18l2-1 1.5-1.2c1 .5 2.1.8 3.2.8s2.2-.3 3.2-.8L15 17l2 1-1.5-3c1.5-1.2 2.5-3 2.5-5C20 5.5 16.5 2 12 2zm0 2c3.3 0 6 2.7 6 6 0 1.3-.6 2.4-1.4 3.2-.3-.1-.6-.2-.9-.3.3-.4.5-.9.5-1.4 0-1.1-.9-2-2-2s-2 .9-2 2c0 .5.2 1 .5 1.4-.3.1-.6.2-.9.3-.8-.8-1.4-1.9-1.4-3.2 0-3.3 2.7-6 6-6z"/></svg>
-       作品门户
-      </h2>
-     </header>
-     <!-- 第 5 课新增：筛选与排序工具条。里面的按钮由 JavaScript 生成，
-          不写 JS 时这里是空的，页面照常显示全部作品。 -->
-     <div class="works-toolbar">
-      <div class="works-tags" id="works-tags">
-      </div>
-      <button class="works-sort" id="works-sort" type="button">
-       按年份：新→旧
-      </button>
-     </div>
-     <ol class="portfolio-list">
-      <li class="work-card work-blog">
-       <a href="https://ffd-p2-blog.netlify.app/" rel="noopener noreferrer" target="_blank">
-        <div class="work-cover">
-         <img alt="长风成卷 · 博客应用的实际网页截图" decoding="async" height="800" src="assets/work-blog.png" width="1200"/>
+
+    <!-- ═══ 01 首屏 ═══ -->
+    <section class="sec hero" id="about">
+      <div class="wrap">
+        <span class="eyebrow">个人介绍 · 2026</span>
+
+        <div class="hero-top">
+          <figure class="portrait">
+            <div class="portrait-img">
+              <img src="1.jpg" alt="吴霞焕的头像" width="650" height="325">
+            </div>
+          </figure>
+
+          <div class="hero-id-copy">
+            <h1>
+              吴霞焕
+              <span class="en">WXH</span>
+            </h1>
+            <p class="hero-role">
+              人工智能技术应用专业学生，正在把网页从能看懂变成能写出来。
+            </p>
+            <div class="hero-meta">
+              <span class="chip">广东科学技术职业学院</span>
+              <span class="chip">人工智能技术应用</span>
+              <span class="chip">25 大模型应用开发班</span>
+            </div>
+          </div>
+
+          <figure class="hero-banner">
+            <img src="2.jpg" alt="" width="640" height="360">
+          </figure>
         </div>
-        <div class="work-copy">
-         <h3>
-          <svg class="spider-icon spider-icon--small" viewBox="0 0 24 24"><path d="M12 2C7.5 2 4 5.5 4 10c0 2 1 3.8 2.5 5L5 18l2-1 1.5-1.2c1 .5 2.1.8 3.2.8s2.2-.3 3.2-.8L15 17l2 1-1.5-3c1.5-1.2 2.5-3 2.5-5C20 5.5 16.5 2 12 2zm0 2c3.3 0 6 2.7 6 6 0 1.3-.6 2.4-1.4 3.2-.3-.1-.6-.2-.9-.3.3-.4.5-.9.5-1.4 0-1.1-.9-2-2-2s-2 .9-2 2c0 .5.2 1 .5 1.4-.3.1-.6.2-.9.3-.8-.8-1.4-1.9-1.4-3.2 0-3.3 2.7-6 6-6z"/></svg>
-          长风成卷 · 博客应用
-         </h3>
-         <p>
-          文章展示、接口与数据库。
-         </p>
+      </div>
+    </section>
+
+    <!-- ═══ 02 学习轨迹：三级上升的台阶 ═══ -->
+    <section class="sec sec--off" id="study">
+      <div class="wrap">
+        <h2 class="sec-title">学习轨迹</h2>
+
+        <ol class="path">
+          <li>
+            <span class="path-no" aria-hidden="true">01</span>
+            <span class="path-when">2025 年秋 · 起点</span>
+            <h3>从一节 HTML 课开始</h3>
+            <p>第一次在浏览器里看到自己写出来的东西——只有标题和一张图。</p>
+          </li>
+
+          <li>
+            <span class="path-no" aria-hidden="true">02</span>
+            <span class="path-when">现在</span>
+            <h3>用 AI 一起把网页写出来</h3>
+            <p>HTML、CSS、JavaScript 都在用，写页面时会拉着 AI 一起干——我出想法和判断，它帮我把想法落成代码。</p>
+            <span class="path-flag" aria-hidden="true"><svg><use href="#spider"/></svg></span>
+          </li>
+
+          <li>
+            <span class="path-no" aria-hidden="true">03</span>
+            <span class="path-when">下一步</span>
+            <h3>做出一个真正能用的应用</h3>
+            <p>现在做的大多是单个页面。下一步想往下走一层——做出一个功能更完整、能真正用起来的应用，并且把它发到线上。</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ═══ 03 做过的事 ═══ -->
+    <section class="sec" id="story">
+      <div class="wrap">
+        <h2 class="sec-title">做过的事</h2>
+
+        <div class="truths">
+          <article class="truth">
+            <span class="truth-no" aria-hidden="true">01</span>
+            <span class="truth-kind"><svg aria-hidden="true"><use href="#spider"/></svg>技能比赛</span>
+            <h3>省级计算机创新设计大赛 · 团队赛 · 三等奖</h3>
+            <p>备赛两个多月，我负责把作品讲清楚——功能说明、实现文档、提交材料。
+            为了把文档写准确，每个模块我都得先搞懂它是怎么实现的，包括不是我负责的部分。</p>
+          </article>
+
+          <article class="truth">
+            <span class="truth-no" aria-hidden="true">02</span>
+            <span class="truth-kind"><svg aria-hidden="true"><use href="#spider"/></svg>班级工作</span>
+            <h3>学习委员</h3>
+            <p>负责收发通知、统计信息。通知发下去不算完——同学看不明白的地方会来问我，
+            我先去问清楚，再回来一条条解释，不把"你自己去问老师"丢回去。</p>
+          </article>
+
+          <article class="truth">
+            <span class="truth-no" aria-hidden="true">03</span>
+            <span class="truth-kind"><svg aria-hidden="true"><use href="#spider"/></svg>社团</span>
+            <h3>文艺社团</h3>
+            <p>一周里最放松的那几个小时。活动散了顺路去吃饭，能一路聊到宿舍快关门，
+            在这里认识了不少别的专业的同学。</p>
+          </article>
         </div>
-       </a>
-      </li>
-      <li class="work-card work-community">
-       <a href="https://ffd-p3-community.netlify.app/" rel="noopener noreferrer" target="_blank">
-        <div class="work-cover">
-         <img alt="群像云图 · 社区应用的实际网页截图" decoding="async" height="800" src="assets/work-community.png" width="1200"/>
+      </div>
+    </section>
+
+    <!-- ═══ 04 三个标签 ═══ -->
+    <section class="sec sec--off" id="tags">
+      <div class="wrap">
+        <h2 class="sec-title">三个标签</h2>
+
+        <div class="tags">
+          <div class="tag">
+            <svg class="tag-icon" aria-hidden="true"><use href="#spider"/></svg>
+            <div>
+              <h3>靠谱、说到做到</h3>
+              <p>答应的事会盯到底。当学习委员的这段时间，通知发出去不算完，
+              还要确认同学有没有收到、有没有看不懂的地方——这两件事才是活儿的主体。</p>
+            </div>
+          </div>
+
+          <div class="tag">
+            <svg class="tag-icon" aria-hidden="true"><use href="#spider"/></svg>
+            <div>
+              <h3>爱钻研、必须搞懂</h3>
+              <p>遇到问题不肯糊过去。备赛写文档时，为了把一个模块的说明写准确，
+              我把它从代码到效果重新理了一遍——讲不清楚的地方，说明我自己也没真搞懂。</p>
+            </div>
+          </div>
+
+          <div class="tag">
+            <svg class="tag-icon" aria-hidden="true"><use href="#spider"/></svg>
+            <div>
+              <h3>好相处、愿意帮人</h3>
+              <p>同学来问问题我从不嫌烦，宁可多讲两遍。班里的通知，我也尽量写成大家一眼能看懂的样子。</p>
+            </div>
+          </div>
         </div>
-        <div class="work-copy">
-         <h3>
-          <svg class="spider-icon spider-icon--small" viewBox="0 0 24 24"><path d="M12 2C7.5 2 4 5.5 4 10c0 2 1 3.8 2.5 5L5 18l2-1 1.5-1.2c1 .5 2.1.8 3.2.8s2.2-.3 3.2-.8L15 17l2 1-1.5-3c1.5-1.2 2.5-3 2.5-5C20 5.5 16.5 2 12 2zm0 2c3.3 0 6 2.7 6 6 0 1.3-.6 2.4-1.4 3.2-.3-.1-.6-.2-.9-.3.3-.4.5-.9.5-1.4 0-1.1-.9-2-2-2s-2 .9-2 2c0 .5.2 1 .5 1.4-.3.1-.6.2-.9.3-.8-.8-1.4-1.9-1.4-3.2 0-3.3 2.7-6 6-6z"/></svg>
-          群像云图 · 社区应用
-         </h3>
-         <p>
-          内容发布与社区互动。
-         </p>
+      </div>
+    </section>
+
+    <!-- ═══ 05 收尾：网织到这儿 ═══ -->
+    <section class="sec end">
+      <div class="wrap">
+        <div class="end-spider">
+          <span class="end-thread" aria-hidden="true"></span>
+          <svg class="end-icon" aria-hidden="true"><use href="#spider"/></svg>
         </div>
-       </a>
-      </li>
-      <li class="work-card work-greeting-card">
-       <a href="https://ffd-p4-greeting-card.netlify.app/" rel="noopener noreferrer" target="_blank">
-        <div class="work-cover">
-         <img alt="一笺心意 · 祝福卡片的实际网页截图" decoding="async" height="800" src="assets/work-greeting-card.png" width="1200"/>
-        </div>
-        <div class="work-copy">
-         <h3>
-          <svg class="spider-icon spider-icon--small" viewBox="0 0 24 24"><path d="M12 2C7.5 2 4 5.5 4 10c0 2 1 3.8 2.5 5L5 18l2-1 1.5-1.2c1 .5 2.1.8 3.2.8s2.2-.3 3.2-.8L15 17l2 1-1.5-3c1.5-1.2 2.5-3 2.5-5C20 5.5 16.5 2 12 2zm0 2c3.3 0 6 2.7 6 6 0 1.3-.6 2.4-1.4 3.2-.3-.1-.6-.2-.9-.3.3-.4.5-.9.5-1.4 0-1.1-.9-2-2-2s-2 .9-2 2c0 .5.2 1 .5 1.4-.3.1-.6.2-.9.3-.8-.8-1.4-1.9-1.4-3.2 0-3.3 2.7-6 6-6z"/></svg>
-          一笺心意 · 祝福卡片
-         </h3>
-         <p>
-          卡片制作与作品分享。
-         </p>
-        </div>
-       </a>
-      </li>
-      <li class="work-card work-music-station">
-       <a href="https://ffd-p5-music-station.netlify.app/" rel="noopener noreferrer" target="_blank">
-        <div class="work-cover">
-         <img alt="星声音乐站 · 音乐应用的实际网页截图" decoding="async" height="800" src="assets/work-music-station.png" width="1200"/>
-        </div>
-        <div class="work-copy">
-         <h3>
-          <svg class="spider-icon spider-icon--small" viewBox="0 0 24 24"><path d="M12 2C7.5 2 4 5.5 4 10c0 2 1 3.8 2.5 5L5 18l2-1 1.5-1.2c1 .5 2.1.8 3.2.8s2.2-.3 3.2-.8L15 17l2 1-1.5-3c1.5-1.2 2.5-3 2.5-5C20 5.5 16.5 2 12 2zm0 2c3.3 0 6 2.7 6 6 0 1.3-.6 2.4-1.4 3.2-.3-.1-.6-.2-.9-.3.3-.4.5-.9.5-1.4 0-1.1-.9-2-2-2s-2 .9-2 2c0 .5.2 1 .5 1.4-.3.1-.6.2-.9.3-.8-.8-1.4-1.9-1.4-3.2 0-3.3 2.7-6 6-6z"/></svg>
-          星声音乐站 · 音乐应用
-         </h3>
-         <p>
-          网页音频与交互实践。
-         </p>
-        </div>
-       </a>
-      </li>
-     </ol>
-    </div>
-   </section>
+      </div>
+    </section>
+
   </main>
-  <!-- 第 4 课新增：这两块由 JavaScript 控制，不写 JS 时它们不会出现 -->
-  <p aria-live="polite" class="section-indicator" id="section-indicator">
-  </p>
-  <button aria-label="返回页面顶部" class="to-top" id="to-top" type="button">
-   ↑
-  </button>
+
+  <!-- 第 4 课 TODO 04：右下角栏目名徽标。如果你想让它和左侧的蛛丝蜘蛛只留一个，
+       把下面这一行删掉即可（作业要求保留的话就别删）。 -->
+  <p class="section-indicator" id="section-indicator" aria-live="polite"></p>
+
+  <!-- 第 4 课 TODO 01 / 02：返回顶部按钮，滚过大半屏才浮出来 -->
+  <button class="to-top" id="to-top" type="button" aria-label="返回页面顶部">↑</button>
+
   <footer>
-   <div class="container footer-inner">
-    <a href="#about">
-     <svg class="spider-icon spider-icon--small" viewBox="0 0 24 24"><path d="M12 2C7.5 2 4 5.5 4 10c0 2 1 3.8 2.5 5L5 18l2-1 1.5-1.2c1 .5 2.1.8 3.2.8s2.2-.3 3.2-.8L15 17l2 1-1.5-3c1.5-1.2 2.5-3 2.5-5C20 5.5 16.5 2 12 2zm0 2c3.3 0 6 2.7 6 6 0 1.3-.6 2.4-1.4 3.2-.3-.1-.6-.2-.9-.3.3-.4.5-.9.5-1.4 0-1.1-.9-2-2-2s-2 .9-2 2c0 .5.2 1 .5 1.4-.3.1-.6.2-.9.3-.8-.8-1.4-1.9-1.4-3.2 0-3.3 2.7-6 6-6z"/></svg>
-     回到顶部
-    </a>
-    <a href="#portfolio">
-     作品门户
-    </a>
-   </div>
+    <div class="hd-in">
+      <span>吴霞焕 · 广东科学技术职业学院 · 人工智能技术应用</span>
+      <span>本页最后更新：2026.10</span>
+    </div>
   </footer>
- </body>
+
+</body>
 </html>
